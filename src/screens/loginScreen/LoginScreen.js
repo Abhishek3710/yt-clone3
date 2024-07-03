@@ -1,6 +1,6 @@
 import React from "react";
 import "./_loginScreen.scss";
-import ytlogo from "../../../images/youtube-logo-hd-8.png";
+import ytlogo from "../../../src/images/youtube-logo-hd-8.png";
 
 const LoginScreen = () => {
   return (
