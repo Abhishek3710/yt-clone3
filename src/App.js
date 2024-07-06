@@ -1,10 +1,5 @@
-import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 
 import Header from "./components/header/Header";
@@ -13,6 +8,7 @@ import HomeScreen from "./screens/homeScreen/HomeScreen";
 import LoginScreen from "./screens/loginScreen/LoginScreen";
 
 import "./_app.scss";
+import { useSelector } from "react-redux";
 
 const Layout = ({ children }) => {
   const [sidebar, toggleSidebar] = useState(false);
@@ -33,29 +29,36 @@ const Layout = ({ children }) => {
 };
 
 const App = () => {
+  const { accessToken, loading } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!accessToken && !loading) {
+      navigate("/auth");
+    }
+  }, [accessToken, loading, navigate]);
+
   return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <HomeScreen />
-            </Layout>
-          }
-        />
-        <Route path="/auth" element={<LoginScreen />} />
-        <Route
-          path="/search"
-          element={
-            <Layout>
-              <h1>Hello Search</h1>
-            </Layout>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <HomeScreen />
+          </Layout>
+        }
+      />
+      <Route path="/auth" element={<LoginScreen />} />
+      <Route
+        path="/search"
+        element={
+          <Layout>
+            <h1>Hello Search</h1>
+          </Layout>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 };
 
