@@ -9,6 +9,7 @@ import LoginScreen from "./screens/loginScreen/LoginScreen";
 
 import "./_app.scss";
 import { useSelector } from "react-redux";
+import WatchScreen from "./screens/watchScreen/WatchScreen";
 
 const Layout = ({ children }) => {
   const [sidebar, toggleSidebar] = useState(false);
@@ -18,7 +19,7 @@ const Layout = ({ children }) => {
   return (
     <div>
       <Header handleToggleSidebar={handleToggleSidebar} />
-      <div className="app__container border border-info">
+      <div className="app__container">
         <Sidebar sidebar={sidebar} handleToggleSidebar={handleToggleSidebar} />
         <Container fluid className="app_main border-warning">
           {children}
@@ -54,6 +55,14 @@ const App = () => {
         element={
           <Layout>
             <h1>Hello Search</h1>
+          </Layout>
+        }
+      />
+      <Route
+        path="/watch/:id"
+        element={
+          <Layout>
+            <WatchScreen />
           </Layout>
         }
       />
