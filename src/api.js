@@ -19,7 +19,7 @@ const request = axios.create({
   baseURL: "https://youtube.googleapis.com/youtube/v3/",
 
   params: {
-    key: "AIzaSyCgAxOudQR-p7Kc2US3hxO8wdZhl8I86IA",
+    //key: "AIzaSyCgAxOudQR-p7Kc2US3hxO8wdZhl8I86IA",
   },
 });
 
