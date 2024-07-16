@@ -26,9 +26,8 @@ export const getChannelDetails = (id) => async (dispatch) => {
 
 export const checkSubscriptionStatus = (id) => async (dispatch, getState) => {
   try {
-    //const token = getState().auth.accessToken;
-    //console.log(token);
-    //if (!token) throw new Error("No access token available");
+    const token = getState().auth.accessToken;
+    if (!token) throw new Error("No access token available");
 
     const { data } = await request("/subscriptions", {
       params: {
@@ -37,7 +36,7 @@ export const checkSubscriptionStatus = (id) => async (dispatch, getState) => {
         mine: true,
       },
       headers: {
-        Authorization: `Bearer ${getState().auth.accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -47,5 +46,9 @@ export const checkSubscriptionStatus = (id) => async (dispatch, getState) => {
     });
   } catch (error) {
     console.log("Error fetching subscription status:", error.message);
+    dispatch({
+      type: SET_SUBSCRIPTION_STATUS,
+      payload: false,
+    });
   }
 };
