@@ -32,8 +32,11 @@ const WatchScreen = () => {
             height="100%"
           ></iframe>
         </div>
-        <VideoMetaData video={video} videvideoId={id} />
-        <Comments />
+        <VideoMetaData video={video} videoId={id} />
+        <Comments
+          videoId={id}
+          totalComments={video?.statistics?.commentCount}
+        />
       </Col>
       <Col>
         {[...Array(20)].map(() => (
