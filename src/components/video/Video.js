@@ -30,33 +30,59 @@ const Video = ({ video }) => {
 
   useEffect(() => {
     const get_video_details = async () => {
-      const {
-        data: { items },
-      } = await request("videos", {
-        params: {
-          part: "contentDetails,statistics",
-          id: _videoId,
-        },
-      });
-      setDuration(items[0].contentDetails.duration);
-      setViews(items[0].statistics.viewCount);
+      try {
+        const {
+          data: { items },
+        } = await request("videos", {
+          params: {
+            part: "contentDetails,statistics",
+            id: _videoId,
+          },
+        });
+        if (items && items.length > 0) {
+          setDuration(items[0].contentDetails.duration);
+          setViews(items[0].statistics.viewCount);
+        } else {
+          console.error("No video details found for ID:", _videoId);
+        }
+      } catch (error) {
+        console.error("Error fetching video details:", error);
+      }
     };
-    get_video_details();
+
+    if (_videoId) {
+      get_video_details();
+    } else {
+      console.error("Invalid video ID:", _videoId);
+    }
   }, [_videoId]);
 
   useEffect(() => {
     const get_channel_icon = async () => {
-      const {
-        data: { items },
-      } = await request("/channels", {
-        params: {
-          part: "snippet",
-          id: channelId,
-        },
-      });
-      setChannelIcon(items[0].snippet.thumbnails.default);
+      try {
+        const {
+          data: { items },
+        } = await request("/channels", {
+          params: {
+            part: "snippet",
+            id: channelId,
+          },
+        });
+        if (items && items.length > 0) {
+          setChannelIcon(items[0].snippet.thumbnails.default);
+        } else {
+          console.error("No channel details found for ID:", channelId);
+        }
+      } catch (error) {
+        console.error("Error fetching channel icon:", error);
+      }
     };
-    get_channel_icon();
+
+    if (channelId) {
+      get_channel_icon();
+    } else {
+      console.error("Invalid channel ID:", channelId);
+    }
   }, [channelId]);
 
   const navigate = useNavigate();
@@ -68,7 +94,6 @@ const Video = ({ video }) => {
   return (
     <div className="video" onClick={handleVideoClick}>
       <div className="video__top">
-        {/* <img src={medium.url} alt="NA" /> */}
         <LazyLoadImage src={medium.url} effect="blur" />
         <span className="video__top__duration">{_duration}</span>
       </div>
@@ -81,7 +106,6 @@ const Video = ({ video }) => {
         <span>{moment(publishedAt).fromNow()}</span>
       </div>
       <div className="video__channel">
-        {/* <img src={channelIcon?.url} alt="" /> */}
         <LazyLoadImage src={channelIcon?.url} effect="blur" />
         <p>{channelTitle}</p>
       </div>
