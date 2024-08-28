@@ -9,7 +9,7 @@ import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import request from "../../api";
 
-const VideoHorizontal = ({ video }) => {
+const VideoHorizontal = ({ video, searchScreen }) => {
   const {
     id,
     snippet: {
@@ -22,7 +22,10 @@ const VideoHorizontal = ({ video }) => {
     },
   } = video;
 
+  const isVideo = !(id.kind === "youtube#channel");
+
   const navigate = useNavigate();
+
   const [views, setViews] = useState(null);
   const [duration, setDuration] = useState(null);
 
@@ -67,7 +70,7 @@ const VideoHorizontal = ({ video }) => {
       className="py-2 m-1 videoHorizontal align-items-center"
       onClick={handleClick}
     >
-      <Col xs={6} md={4} className="videoHorizontal__left">
+      <Col xs={6} md={searchScreen ? 4 : 6} className="videoHorizontal__left">
         <LazyLoadImage
           src={medium.url}
           effect="blur"
@@ -76,7 +79,11 @@ const VideoHorizontal = ({ video }) => {
         />
         <span className="videoHorizontal__duration">{_duration}</span>
       </Col>
-      <Col xs={6} md={6} className="p-0 videoHorizontal__right">
+      <Col
+        xs={6}
+        md={searchScreen ? 8 : 6}
+        className="p-0 videoHorizontal__right"
+      >
         <p className="mb-1 videoHorizontal__title">{title}</p>
         <div className="videoHorizontal__details">
           <AiFillEye /> {numeral(views).format("0.a")} Views •{" "}
@@ -84,6 +91,7 @@ const VideoHorizontal = ({ video }) => {
         </div>
 
         <div className="my-1 videoHorizontal__channel d-flex align-items-center">
+          {isVideo && <LazyLoadImage src={channelIcon?.url} effect="blur" />}
           <p className="mb-0">{channelTitle}</p>
         </div>
       </Col>

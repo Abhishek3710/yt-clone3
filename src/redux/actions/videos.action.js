@@ -6,6 +6,9 @@ import {
   RELATED_VIDEO_FAIL,
   RELATED_VIDEO_REQUEST,
   RELATED_VIDEO_SUCCESS,
+  SEARCHED_VIDEO_FAIL,
+  SEARCHED_VIDEO_REQUEST,
+  SEARCHED_VIDEO_SUCCESS,
   SELECTED_VIDEO_FAIL,
   SELECTED_VIDEO_REQUEST,
   SELECTED_VIDEO_SUCCESS,
@@ -107,6 +110,34 @@ export const getRelatedVideos = (keyword) => async (dispatch) => {
     console.log(error.message);
     dispatch({
       type: RELATED_VIDEO_FAIL,
+      payload: error.message,
+    });
+  }
+};
+
+export const getVideosBySearch = (keyword) => async (dispatch) => {
+  try {
+    dispatch({
+      type: SEARCHED_VIDEO_REQUEST,
+    });
+    const { data } = await request("/search", {
+      params: {
+        part: "snippet",
+
+        maxResults: 15,
+        q: keyword,
+        type: "video,channel",
+      },
+    });
+
+    dispatch({
+      type: SEARCHED_VIDEO_SUCCESS,
+      payload: data.items,
+    });
+  } catch (error) {
+    console.log(error.message);
+    dispatch({
+      type: SEARCHED_VIDEO_FAIL,
       payload: error.message,
     });
   }
